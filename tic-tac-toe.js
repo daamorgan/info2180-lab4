@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded',()=> {
+	var chosen=0;//mIGHT HAVE TO TAKE OUT
 	var squares=document.getElementById("board").querySelectorAll("div");
   	for(var i=0; i < squares.length; i++){
   		squares[i].className="square";
@@ -10,24 +11,39 @@ document.addEventListener('DOMContentLoaded',()=> {
 function makeListener(box){
 	box.addEventListener("mouseover", function(){
 		box.classList.add("hover");//WHen it hovers over O shouldnt it be white
-
 	});
-	
+
 	box.addEventListener("mouseout", function(){
 		box.classList.remove("hover");
 	});
 
 	box.addEventListener("click", function(){
-		if (numOfSelection%2==0){
+		if (chosen%2==0){
 			box.classList.add("X");
 			box.textContent="X";
-			numOfSelection++;
+			state[0].push(box.id);
+			chosen++;
+			IDK()
 		}else{
 			box.classList.add("O");
 			box.textContent="O";
-			numOfSelection++;
+			state[1].push(box.id);//DONT KNOW IF THIS WILL WORK
+			chosen++;
+			IDK();
 		}});
 }
+
+function IDK(){
+	var winner=anyWinner();
+	if(chosen==9 && winner=="No winner"){
+			displayWinner("draw");
+			//NEED TO STOP THE GAME
+	}else if(chosen>=5 && winner!="No winner"){//Need to take of <=9 andNeed to prevent the selection of a square that has a value
+			displayWinner(winner);
+			//NEED TO STOP THE GAME
+	}
+}
+
 
 function AllListener(array){
 	array.forEach(makeListener);
@@ -39,13 +55,33 @@ function squareId(array){
 		array[i].id=`${i+1}`;
 }}
 
+function anyWinner(){
+	var possibleWins=[["1","2","3"],["1","4","7"], ["2","5","8"],["3","6","9"],["4","5","6"],["7","8","9"],["1","5","9"],["3","5","7"]];
+	for (var i=0 ; i < possibleWins.length; i++){	
+		for(var plays=0; plays< state.length;plays++){
+			if (state[plays].includes(possibleWins[i][0]) && state[plays].includes(possibleWins[i][1])&&state[plays].includes(possibleWins[i][2])){
+				return state[plays][0];
+			}
+		}
+	}
+	return "No winner"
+}
 
 
-var numOfSelection=0;
 
+function displayWinner(winner){
+	var statusbar=document.getElementById("status");
+		if (winner!="draw"){
+			statusbar.classList.add("you-won");
+			statusbar.textContent=`Congratulations! ${winner} is the Winner!`;
+		}else{
+			statusbar.textContent="Sorry, it was a draw.";
+		}
 
+}
+var state=[["X"],["0"]];
+var chosen=0;
 function startup(array){
-	var state=[];/*SHOULD THIS BE GLOBAL*/
 	AllListener(array);
 	squareId(array);
 }
