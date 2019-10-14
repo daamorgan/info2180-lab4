@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded',()=> {
  
 
 function makeListener(box){
+	box.addEventListener("mouseover", function(){
+		box.classList.add("hover");//WHen it hovers over O shouldnt it be white
+
+	});
+	
+	box.addEventListener("mouseout", function(){
+		box.classList.remove("hover");
+	});
+
 	box.addEventListener("click", function(){
 		if (numOfSelection%2==0){
 			box.classList.add("X");
@@ -17,8 +26,8 @@ function makeListener(box){
 			box.classList.add("O");
 			box.textContent="O";
 			numOfSelection++;
-		}
-})}
+		}});
+}
 
 function AllListener(array){
 	array.forEach(makeListener);
@@ -29,6 +38,8 @@ function squareId(array){
 	for(var i=0; i < array.length; i++){
 		array[i].id=`${i+1}`;
 }}
+
+
 
 var numOfSelection=0;
 
