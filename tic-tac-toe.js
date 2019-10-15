@@ -33,7 +33,7 @@ function makeListener(box){
 		}});
 }
 
-function IDK(){
+function IDK(){//change function name
 	var winner=anyWinner();
 	if(chosen==9 && winner=="No winner"){
 			displayWinner("draw");
@@ -66,8 +66,25 @@ function anyWinner(){
 	}
 	return "No winner"
 }
-
-
+function reset(array){
+	var button=document.querySelector("button");
+	button.addEventListener("click", function(){
+	state=[["X"],["O"]];
+	chosen=0;
+	var statusDiv=document.getElementById("status");
+	statusDiv.classList.remove("you-won");
+	statusDiv.textContent="Move your mouse over a square and click to play an X or an O";//can i do this without manual seeting it back
+	for (var i=0; i< array.length; i++){
+		var box=array[i];
+		if (box.textContent=="X"){
+			box.textContent=" ";
+			box.classList.remove("X");
+		}else if (box.textContent=="O"){
+			box.textContent=" ";
+			box.classList.remove("O");
+		}}
+	})
+}
 
 function displayWinner(winner){
 	var statusbar=document.getElementById("status");
@@ -84,4 +101,6 @@ var chosen=0;
 function startup(array){
 	AllListener(array);
 	squareId(array);
+	reset(array);
+	
 }
