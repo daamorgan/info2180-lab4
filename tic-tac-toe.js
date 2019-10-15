@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded',()=> {
-	var chosen=0;//mIGHT HAVE TO TAKE OUT
 	var squares=document.getElementById("board").querySelectorAll("div");
   	for(var i=0; i < squares.length; i++){
   		squares[i].className="square";
@@ -10,7 +9,7 @@ document.addEventListener('DOMContentLoaded',()=> {
 
 function makeListener(box){
 	box.addEventListener("mouseover", function(){
-		box.classList.add("hover");//WHen it hovers over O shouldnt it be white
+		box.classList.add("hover");
 	});
 
 	box.addEventListener("mouseout", function(){
@@ -18,19 +17,24 @@ function makeListener(box){
 	});
 
 	box.addEventListener("click", function(){
-		if (chosen%2==0){
-			box.classList.add("X");
-			box.textContent="X";
-			state[0].push(box.id);
-			chosen++;
-			IDK()
-		}else{
-			box.classList.add("O");
-			box.textContent="O";
-			state[1].push(box.id);//DONT KNOW IF THIS WILL WORK
+		if (usedBox[parseInt(box.id)-1]==false){
+			if (chosen%2==0){
+				box.classList.add("X");
+				box.textContent="X";
+				state[0].push(box.id);
+			}else{
+				box.classList.add("O");
+				box.textContent="O";
+				state[1].push(box.id);
+			}
+			usedBox[parseInt(box.id)-1]=true;
+			console.log(usedBox);
 			chosen++;
 			IDK();
-		}});
+
+		}else{
+			//NEED A MESSAGE STATING THAT THEY SHOULD LIKE AN EMPTY BOX
+			}});
 }
 
 function IDK(){//change function name
@@ -69,6 +73,7 @@ function anyWinner(){
 function reset(array){
 	var button=document.querySelector("button");
 	button.addEventListener("click", function(){
+	usedBox=[false,false,false,false,false,false,false,false,false];
 	state=[["X"],["O"]];
 	chosen=0;
 	var statusDiv=document.getElementById("status");
@@ -86,21 +91,30 @@ function reset(array){
 	})
 }
 
+function stop(){
+	for (var i=0; i<usedBox.length;i++){
+		if (usedBox[i]==false){
+			usedBox[i]=true;
+		}	
+	}
+}
+
 function displayWinner(winner){
 	var statusbar=document.getElementById("status");
 		if (winner!="draw"){
+			stop();
 			statusbar.classList.add("you-won");
 			statusbar.textContent=`Congratulations! ${winner} is the Winner!`;
 		}else{
 			statusbar.textContent="Sorry, it was a draw.";
 		}
-
 }
+
 var state=[["X"],["0"]];
 var chosen=0;
+var usedBox=[false,false,false,false,false,false,false,false,false];
 function startup(array){
 	AllListener(array);
 	squareId(array);
 	reset(array);
-	
 }
